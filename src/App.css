@@ -1,0 +1,13 @@
+body{
+  background-image: url(D:\placement\Expensetracker\src\Assets\images\business-office-scene.jpg);
+  min-height: 100vh;
+  position: relative;
+}
+.overlay{
+  position:absolute;
+  background-color: rgb(236, 238, 238);
+  height: 100;
+  width: 100;
+  mix-blend-mode: normal;
+
+}
