@@ -1,32 +1,49 @@
 import React, { useRef, useState } from 'react'
 import { Button,  Form } from 'react-bootstrap'
+import Validation from '../Components/Validation'
 
 const Signuppage = () => {
    const email=useRef()
    const password=useRef();
    const confirmpassword=useRef();
-   const [valid,setvalid]=useState(true)
-   const submithandler=(e)=>{
+   const [value,setValues]=useState({
+    email:"",
+    password:"",
+    confirmpassword:""
+   })
+   const[error,setError]=useState(null)
+   const submithandler=async(e)=>{
     e.preventDefault()
     const enteredemail=email.current.value;
     const enteredpassword=password.current.value;
-    const validation=enteredpassword===confirmpassword;
-    setvalid(validation)
-    if(valid){
-      fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
-  
-    {
-      method:"POST",
-      body:JSON.stringify({
-        email:enteredemail,
-        password:enteredpassword,
-        returnSecureToken:true,
-      }),
-      headers:{
-        "Content-type":"application/json"
-      }
-   })
+    const enteredconfirmpassword=confirmpassword.current.value;
+    
+    const enteredvalue={
+      email: enteredemail,
+      password:enteredpassword,
+      confirmpassword:enteredconfirmpassword
     }
+     await setValues(enteredvalue)
+    await setError(Validation(value));
+    console.log(error)
+    if(!error){
+     await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
+  
+      {
+        method:"POST",
+        body:JSON.stringify({
+          email:enteredemail,
+          password:enteredpassword,
+          returnSecureToken:true,
+        }),
+        headers:{
+          "Content-type":"application/json"
+        }
+     })
+      
+    }
+ 
+     
     
   }
   return (
@@ -51,7 +68,7 @@ const Signuppage = () => {
       <Form.Group className="mb-3" controlId="confirmPassword">
         <Form.Label>Confirmpassword</Form.Label>
         <Form.Control type="password"ref={confirmpassword} placeholder="Password" />
-       
+       {error&&<p>{error.confirmpassword}</p>}
       </Form.Group>
      
       <Button variant="primary" type="submit">
