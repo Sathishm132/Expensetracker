@@ -1,8 +1,9 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Form, Modal } from 'react-bootstrap';
 
 const Expensepage = () => {
   const[show,setShow]=useState();
+  const[profile, setprofile]=useState(null);
   const name=useRef();
   const photo=useRef();
   const clickhandler=()=>{
@@ -23,16 +24,57 @@ const Expensepage = () => {
     headers:{
       "Content-type":"application/json"
     }
+  
 
 
-    })
+    });
     setShow(false)
 
   }
+  useEffect(()=>{
+    fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",{
+      method:"POST",
+      body:JSON.stringify({
+        idToken:localStorage.getItem("token"),
+      }),
+      headers:{
+        "Content-type":"application/jason"
+      }
+    
+    }).then((res)=>{
+      if(res.ok){
+        
+
+        return res.json();
+       
+      }else{
+        return res.json().then((data)=>{
+          let Errormessage="Authentication failed";
+          // if(data&&data.error&&data.error.message){
+          //   Errormessage=data.error.message
+         // } 
+         throw new Error(Errormessage) 
+         
+        })
+      }
+    }).then((data)=>{
+   
+      console.log(data);
+      setprofile({name:data.displayName,photo:data.photoUrl});
+     
+     
+
+    }).catch((err)=>{
+      alert(err.message)
+
+
+    })
+  },[])
   return (
     <>
     <div><h3>expense page</h3> 
-    <h3 onClick={clickhandler}>complete</h3>
+    {!profile&&<h3 onClick={clickhandler}>complete</h3>}
+    {profile&&<h2>{profile.name}</h2>}
     </div>
      <Modal show={show} onHide={handleClose}>
      <Modal.Header closeButton>
