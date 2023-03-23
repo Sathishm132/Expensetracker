@@ -9,7 +9,7 @@ const Signinpage = () => {
     const submithandler=(e)=>{
         e.preventDefault()
         const enteredemail=email.current.value;
-        const enteredpassword=email.current.value;
+        const enteredpassword=password.current.value;
         fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
         {
           method:"POST",
@@ -23,8 +23,10 @@ const Signinpage = () => {
           }
        }).then((res)=>{
         if(res.ok){
-          return res.json()
+          navigate("/expense");
 
+          return res.json();
+         
         }else{
           return res.json().then((data)=>{
             let Errormessage="Authentication failed";
@@ -36,8 +38,9 @@ const Signinpage = () => {
           })
         }
       }).then((data)=>{
+        localStorage.setItem("token",data.idToken);
         console.log(data.idToken);
-        navigate("/expense")
+       
        
 
       }).catch((err)=>{
@@ -73,8 +76,8 @@ const Signinpage = () => {
 
       
       <div className="d-grid ">
-      <Button variant="primary" >
-        signUp
+      <Button variant="primary" type="submit" >
+        Login
       </Button>
       
     </div>
@@ -85,7 +88,7 @@ const Signinpage = () => {
   </div>
   <br/>
   <div className='position-relative d-grid'>
-  <Button variant="outline-success">Have an account? login</Button>
+  <Button variant="outline-success" onClick={()=>{navigate("/")}}>Dont have account? signUp</Button>
     </div>
 
 

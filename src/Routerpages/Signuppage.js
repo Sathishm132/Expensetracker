@@ -13,20 +13,18 @@ const Signuppage = () => {
    const[error,setError]=useState(null)
    const navigate=useNavigate()
    const changehandler=(e)=>{
-  
+    e.preventDefault()
  
     let {name,value}=e.target
     const enteredvalue= {...formvalue,[name]:value}
     setFormvalues(enteredvalue) 
-   
    }
    const submithandler=(e)=>{
     e.preventDefault()
     setError(Validation(formvalue));
-  
 
     
-   
+   navigate("/signin")
     
  
     if(!error){
@@ -42,13 +40,34 @@ const Signuppage = () => {
         headers:{
           "Content-type":"application/json"
         }
-     })
+     }).then((res)=>{
+        if(res.ok){
+          return res.json()
+
+        }else{
+          return res.json().then((data)=>{
+            let Errormessage="Authentication failed";
+            // if(data&&data.error&&data.error.message){
+            //   Errormessage=data.error.message
+           // } 
+           throw new Error(Errormessage) 
+           
+          })
+        }
+      }).then((data)=>{
+       
+
+      }).catch((err)=>{
+        alert(err.message)
+
+
+      })
+    }
       
     }
-  }
  
      
-    
+
   
   return (
    <>
@@ -91,7 +110,7 @@ const Signuppage = () => {
   </div>
   <br/>
   <div className='position-relative d-grid'>
-  <Button variant="outline-success">Have an account? login</Button>
+  <Button variant="outline-success"onClick={()=>{navigate("/signin")}}>Have an account? login</Button>
     </div>
 
 
