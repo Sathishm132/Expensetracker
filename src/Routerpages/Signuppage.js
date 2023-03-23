@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Button,  Form } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 import Validation from '../Components/Validation'
 
 const Signuppage = () => {
@@ -10,15 +11,19 @@ const Signuppage = () => {
     confirmpassword:""
    })
    const[error,setError]=useState(null)
+   const navigate=useNavigate()
    const changehandler=(e)=>{
+  
  
     let {name,value}=e.target
     const enteredvalue= {...formvalue,[name]:value}
     setFormvalues(enteredvalue) 
+   
    }
    const submithandler=(e)=>{
     e.preventDefault()
     setError(Validation(formvalue));
+  
 
     
    
@@ -40,17 +45,19 @@ const Signuppage = () => {
      })
       
     }
+  }
  
      
     
-  }
+  
   return (
    <>
-   <div>
-   <div bg="light" className=' position-absolute top-50 start-50 translate-middle d-flex justify-content-center align-items-center'>
- 
+   <div className='position-absolute p-5 top-50 start-50 translate-middle d-inline-block justify-content-center align-items-center'>
+   <div  className='overlay p-5 shadow '>
+    
 
     <Form onSubmit={submithandler}>
+      <h1 className='d-flex justify-content-center mb-5'>SignUp</h1>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" name='email' onChange={changehandler} placeholder="Enter email" />
@@ -71,15 +78,23 @@ const Signuppage = () => {
         <Form.Control type="password"name="confirmpassword"onChange={changehandler} placeholder="Password" />
        {error&&<p style={{color:"red"}}>{error.confirmpassword}</p>}
       </Form.Group>
-     
-      <Button variant="primary" type="submit">
-        Sign up
+      <div className="d-grid ">
+      <Button variant="primary" type='submit' >
+        signUp
       </Button>
+      
+    </div>
+     
     </Form>
-
+    
      
   </div>
- 
+  <br/>
+  <div className='position-relative d-grid'>
+  <Button variant="outline-success">Have an account? login</Button>
+    </div>
+
+
    </div>
  
    
