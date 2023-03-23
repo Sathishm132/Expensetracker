@@ -3,37 +3,35 @@ import { Button,  Form } from 'react-bootstrap'
 import Validation from '../Components/Validation'
 
 const Signuppage = () => {
-   const email=useRef()
-   const password=useRef();
-   const confirmpassword=useRef();
-   const [value,setValues]=useState({
+ 
+   const [formvalue,setFormvalues]=useState({
     email:"",
     password:"",
     confirmpassword:""
    })
    const[error,setError]=useState(null)
-   const submithandler=async(e)=>{
+   const changehandler=(e)=>{
+ 
+    let {name,value}=e.target
+    const enteredvalue= {...formvalue,[name]:value}
+    setFormvalues(enteredvalue) 
+   }
+   const submithandler=(e)=>{
     e.preventDefault()
-    const enteredemail=email.current.value;
-    const enteredpassword=password.current.value;
-    const enteredconfirmpassword=confirmpassword.current.value;
+    setError(Validation(formvalue));
+
     
-    const enteredvalue={
-      email: enteredemail,
-      password:enteredpassword,
-      confirmpassword:enteredconfirmpassword
-    }
-     await setValues(enteredvalue)
-    await setError(Validation(value));
-    console.log(error)
+   
+    
+ 
     if(!error){
-     await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
+      fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
   
       {
         method:"POST",
         body:JSON.stringify({
-          email:enteredemail,
-          password:enteredpassword,
+          email:formvalue.email,
+          password:formvalue.password,
           returnSecureToken:true,
         }),
         headers:{
@@ -55,20 +53,23 @@ const Signuppage = () => {
     <Form onSubmit={submithandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" ref={email} placeholder="Enter email" />
+        <Form.Control type="email" name='email' onChange={changehandler} placeholder="Enter email" />
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
         </Form.Text>
+        {error&&<p style={{color:"red"}}>{error.email}</p>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password"ref={password} placeholder="Password" />
+        <Form.Control type="password" name="password" onChange={changehandler} placeholder="Password" />
+        {error&&<p style={{color:"red"}}>{error.password}</p>}
       </Form.Group>
+
       <Form.Group className="mb-3" controlId="confirmPassword">
         <Form.Label>Confirmpassword</Form.Label>
-        <Form.Control type="password"ref={confirmpassword} placeholder="Password" />
-       {error&&<p>{error.confirmpassword}</p>}
+        <Form.Control type="password"name="confirmpassword"onChange={changehandler} placeholder="Password" />
+       {error&&<p style={{color:"red"}}>{error.confirmpassword}</p>}
       </Form.Group>
      
       <Button variant="primary" type="submit">
