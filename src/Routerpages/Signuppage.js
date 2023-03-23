@@ -1,10 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { Button,  Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import Emailverification from '../Components/Emailverification'
 import Validation from '../Components/Validation'
 
 const Signuppage = () => {
- 
+   const [show,setShow]=useState(false)
+   const[data,setData]=useState(null)
    const [formvalue,setFormvalues]=useState({
     email:"",
     password:"",
@@ -18,16 +20,17 @@ const Signuppage = () => {
     let {name,value}=e.target
     const enteredvalue= {...formvalue,[name]:value}
     setFormvalues(enteredvalue) 
+    
+    
    }
-   const submithandler=(e)=>{
+   const submithandler=async(e)=>{
     e.preventDefault()
     setError(Validation(formvalue));
-
-    
-   navigate("/signin")
     
  
-    if(!error){
+    
+ 
+    if(error){
       fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
   
       {
@@ -42,7 +45,10 @@ const Signuppage = () => {
         }
      }).then((res)=>{
         if(res.ok){
-          return res.json()
+         setShow(true)
+          return res.json();
+
+        
 
         }else{
           return res.json().then((data)=>{
@@ -55,7 +61,9 @@ const Signuppage = () => {
           })
         }
       }).then((data)=>{
-       
+       console.log(data);
+       setData({email:data.email,token:data.idToken})
+      //  setShow(true);
 
       }).catch((err)=>{
         alert(err.message)
@@ -63,7 +71,7 @@ const Signuppage = () => {
 
       })
     }
-      
+   
     }
  
      
@@ -101,6 +109,13 @@ const Signuppage = () => {
       <Button variant="primary" type='submit' >
         signUp
       </Button>
+      
+
+      <Emailverification
+        show={show}
+        onHide={() => setShow(false)}
+        data={data}
+      />
       
     </div>
      
