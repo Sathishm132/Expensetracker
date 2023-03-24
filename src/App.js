@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, redirect, RouterProvider } from 'react-router-dom';
 import "./App.css"
 import Expensepage from './Routerpages/Expensepage';
 import Signinpage from './Routerpages/Signinpage';
@@ -9,16 +9,24 @@ import Signuppage from './Routerpages/Signuppage';
 const App = () => {
   const router=createBrowserRouter([
     {
-      path:"/",
-      element:<Signuppage/>
+      path:"/expense",
+      element:<Expensepage/>,
+      loader:()=>{
+        if(localStorage.getItem("token")){
+          return true
+        }else{
+          return redirect("/signin")
+        }
+      }
     },
     {
       path:"/signin",
       element:<Signinpage/>
+      
     },
     {
-      path:"/expense",
-      element:<Expensepage/>
+      path:"/signup",
+      element:<Signuppage/>
     }
   ])
   return (
