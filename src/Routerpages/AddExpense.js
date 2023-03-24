@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react'
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
 import Expenselist from '../Components/Expenselist';
 
@@ -19,10 +20,32 @@ const AddExpense = () => {
         }
        
          setExpense([...expense,expensedata])
+         axios.post(
+          `https://crud-12e65-default-rtdb.asia-southeast1.firebasedatabase.app/expense.json`,expensedata
+         
+        )
       
         console.log(expense)
          
     }
+    useEffect(() => {
+      const fetch = async () => {
+        const response = await axios.get(
+          `https://crud-12e65-default-rtdb.asia-southeast1.firebasedatabase.app/expense.json`
+        );
+        let fetchdata = [];
+        for (let key in response.data) {
+          fetchdata.push({ ...response.data[key], id: key });
+        }
+        
+        setExpense(fetchdata)
+      
+      };
+      fetch();
+      
+      
+    }, []);
+
     const expenselist=expense.map((item)=>(<ul><Expenselist
     money={item.money}
     description={item.description} >

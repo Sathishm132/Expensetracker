@@ -5,7 +5,7 @@ const Expenselist = (props) => {
   return (
     <>
     <Container>
-    <ListGroup >
+    <ListGroup className="my-2" >
           <ListGroup.Item>{props.money}</ListGroup.Item>
           <ListGroup.Item>{props.description}</ListGroup.Item>
           <ListGroup.Item>{props.category}</ListGroup.Item>
