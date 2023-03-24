@@ -1,26 +1,31 @@
 import React, { useRef } from 'react'
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form, Toast } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom';
 
 const Forgotpassword = () => {
     const email=useRef();
     const navigate=useNavigate()
-    const submithandler=async()=>{
-        await fetch(
-            "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",
-            {
+    const submithandler=(e)=>{
+        e.preventDefault()
+
+    const enteredemail=email.current.value
+           fetch( "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyA0lpUzoOCsGC3kldjNFc2I7Shdyo85qM0",{
+             method:"POST",
               body: JSON.stringify({
-                requestType: "PASSWORD_RESET",
-                email: email.current.value,
+              requestType: "PASSWORD_RESET",
+                email: enteredemail
       
-                returnSecureToken: true,
+               
               }),
               headers: {
                 "Content-type": "application/json",
               },
             }
-          );
-          navigate("/signin");
+          ).then(()=>{
+           navigate("/signin")
+          })
+       
+      
 
 
     }
@@ -51,6 +56,7 @@ const Forgotpassword = () => {
         
       </Form>
       </div>
+     
       </div>)
 
 }

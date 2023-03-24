@@ -72,7 +72,7 @@ const Profile=()=>{
     return (
       <>
       <div>
-      {!profile&&<h3 onClick={clickhandler}>complete</h3>}
+      {profile===null&&<h3 onClick={clickhandler}>complete</h3>}
       {profile&&<div>
         <img src={profile.photo} class="rounded-circle shadow-4"
   style={{width: "70px"}} alt="Avatar" /><h5 > {profile.name}</h5></div>}

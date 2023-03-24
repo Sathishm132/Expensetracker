@@ -46,7 +46,7 @@ const Signinpage = () => {
       .then((data) => {
         localStorage.setItem("token", data.idToken);
 
-        navigate("/expense");
+        navigate("/");
       })
       .catch((err) => {
         alert(err.message);
