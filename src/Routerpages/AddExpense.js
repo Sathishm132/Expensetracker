@@ -1,26 +1,51 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Button, Container, Form } from 'react-bootstrap'
+import Expenselist from '../Components/Expenselist';
 
 const AddExpense = () => {
+    const money=useRef();
+    const description=useRef();
+    const category=useRef();
+    const[expense,setExpense]=useState([])
+  
+    const submithandler=(e)=>{
+     
+        e.preventDefault()
+       
+        const expensedata={
+            money:money.current.value,
+            description:description.current.value,
+            category:category.current.value,
+        }
+       
+         setExpense([...expense,expensedata])
+      
+        console.log(expense)
+         
+    }
+    const expenselist=expense.map((item)=>(<ul><Expenselist
+    money={item.money}
+    description={item.description} >
+      </Expenselist></ul>));
   return (
     
     <>
     <div  className='mt-5'>
     <Container>
-    <Form>
+    <Form onSubmit={submithandler}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Money spent</Form.Label>
-        <Form.Control type="number" placeholder="Enter  your money spent" />
+        <Form.Control type="number" placeholder="Enter  your money spent" ref={money} />
       
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Description</Form.Label>
-        <Form.Control type="text" placeholder="Password" />
+        <Form.Control type="text" placeholder="Write description" ref={description} />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Category</Form.Label>
-        <Form.Select aria-label="Default select example">
+        <Form.Select aria-label="Default select example" ref={category}>
       <option>Open this select menu</option>
       <option >grocery</option>
       <option >Houserent</option>
@@ -34,7 +59,10 @@ const AddExpense = () => {
         Add expense
       </Button>
     </Form>
+       {expenselist}
+  
     </Container>
+   
     </div>
     </>
   )
