@@ -48,9 +48,9 @@ const App = () => {
   ])
   return (
     
-    <body className='bg'>
+    <div className='bg'>
      <RouterProvider router={router}></RouterProvider>
-    </body>
+    </div>
   )
 };
 
