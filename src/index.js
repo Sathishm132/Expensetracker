@@ -4,7 +4,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
-import Expensecontextprovider from './Components/Context/Expensecontextprovider';
+
+import { Provider } from 'react-redux';
+import store from './Components/Context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<Expensecontextprovider><App /></Expensecontextprovider>);
+root.render(<Provider store={store}><App /></Provider>);

@@ -3,9 +3,23 @@ import axios from "axios"
 import Expenscontext from './ExpenseContext'
 
 const defaultvalue={
-    expenses:[]
+    expenses:[],
+    editstatus:false,
+    filter:{}
+
 }
 const expensereducer=(state,action)=>{
+ 
+      
+    
+  
+  if(action.type==="Delete"){
+    let updatedexpense=state.expenses.filter((item)=>item.id!==action.id)
+    axios.delete(`https://crud-12e65-default-rtdb.asia-southeast1.firebasedatabase.app/expense/${action.id}/.json`)
+    return{
+      expenses:updatedexpense
+    }
+  }
   if(action.type==="Replace"){
     return {
       expenses:action.expenses
@@ -53,13 +67,20 @@ const Expensecontextprovider = (props) => {
     const adexpensehandler=(newexpense)=>{
       dispatch({type:"Add" ,expense:newexpense})
     }
-    const deleteexpensehandler=()=>{}
-    const editexpensehandler=()=>{}
+    const deleteexpensehandler=(id)=>{
+      console.log("delete")
+      dispatch({type:"Delete",id:id})
+    }
+    const editexpensehandler=(id)=>{
+      dispatch({type:"edit",id:id});
+    }
     const contextvalue={
         expenses:expensestate.expenses,
         addexpense:adexpensehandler,
         deleteexpense:deleteexpensehandler,
-        editexpense:editexpensehandler
+        editexpense:editexpensehandler,
+        editstatus:expensestate.editstatus,
+        filter:expensestate.filter
     }
   return (
     <Expenscontext.Provider value={contextvalue}>{props.children}</Expenscontext.Provider>

@@ -1,13 +1,18 @@
-import React, { useContext, useRef } from "react";
+import axios from "axios";
+import React, { useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import Expenscontext from "../Components/Context/ExpenseContext";
+import { useDispatch, useSelector } from "react-redux";
+
+import { ExpenseAction } from "../Components/Context/ExpenseSlice";
 import Expenselist from "../Components/Expenselist";
 
-const AddExpense = () => {
+const AddExpense = (props) => {
   const money = useRef();
   const description = useRef();
   const category = useRef();
-  const cntx = useContext(Expenscontext);
+ 
+  const dispatch=useDispatch()
+  const expenses=useSelector(state=>state.expenses)
 
   const submithandler = (e) => {
     e.preventDefault();
@@ -17,14 +22,19 @@ const AddExpense = () => {
       description: description.current.value,
       category: category.current.value,
     };
+   
+    dispatch(ExpenseAction.addexpense(expensedata));
 
-    cntx.addexpense(expensedata);
+
   };
 
-  const expenselist = cntx.expenses.map((item) => (
+  const expenselist = expenses.map((item) => (
     <ul>
       <Expenselist
-       newexpense={item}
+        money={item.money}
+        description={item.description}
+        category={item.category}
+        id={item.id}
       ></Expenselist>
     </ul>
   ));
