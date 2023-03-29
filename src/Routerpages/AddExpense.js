@@ -1,19 +1,23 @@
-import axios from "axios";
-import React, { useRef } from "react";
+import axios from "axios";import React, { useEffect, useRef } from "react";
 import { Button, Container, Form } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch,  } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import { ExpenseAction } from "../Components/Context/ExpenseSlice";
-import Expenselist from "../Components/Expenselist";
+
+
+const { v4: uuidv4 } = require('uuid');
+
 
 const AddExpense = (props) => {
+  const navigate=useNavigate();
   const money = useRef();
   const description = useRef();
   const category = useRef();
  
   const dispatch=useDispatch()
-  const expenses=useSelector(state=>state.expenses)
-
+ 
+ 
   const submithandler = (e) => {
     e.preventDefault();
 
@@ -21,23 +25,23 @@ const AddExpense = (props) => {
       money: money.current.value,
       description: description.current.value,
       category: category.current.value,
+      uuid:uuidv4()
     };
-   
-    dispatch(ExpenseAction.addexpense(expensedata));
-
+    
+    axios.post(
+      `https://crud-12e65-default-rtdb.asia-southeast1.firebasedatabase.app/expense.json`,expensedata
+     
+    ).then((response)=>{
+    
+     expensedata.id=response.data.name
+  
+        }).then(()=>dispatch(ExpenseAction.addexpense(expensedata)));
+    
+        navigate("/")
 
   };
 
-  const expenselist = expenses.map((item) => (
-    <ul>
-      <Expenselist
-        money={item.money}
-        description={item.description}
-        category={item.category}
-        id={item.id}
-      ></Expenselist>
-    </ul>
-  ));
+ 
   return (
     <>
       <div className="mt-5">
@@ -72,11 +76,11 @@ const AddExpense = (props) => {
             <Form.Group className="mb-3" controlId="formBasicCheckbox">
               <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
-            <Button variant="primary" type="submit">
+            <Button variant="primary"  type="submit">
               Add expense
             </Button>
           </Form>
-          {expenselist}
+          
         </Container>
       </div>
     </>

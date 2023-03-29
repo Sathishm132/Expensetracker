@@ -13,9 +13,12 @@ const ExpenseNavbar = () => {
     navigate("/signin")
 
 
-   
-
   }
+  
+  const addhandler=()=>{
+    navigate("/expense")
+}
+
   return (
   <>
    <Navbar bg='info'>
@@ -23,6 +26,7 @@ const ExpenseNavbar = () => {
         <Navbar.Brand href="#home">Welcome to expense tracker</Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
+        <Button type='primary' onClick={addhandler}> Addexpense</Button>
           <Button type='primary' onClick={clickhandler}> logout</Button>
            <Profile/>
         

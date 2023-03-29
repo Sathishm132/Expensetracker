@@ -9,8 +9,8 @@ const Expenselist = (props) => {
   const dispatch=useDispatch();
   
   const[show,setShow]=useState(false);
-  const deletehandler=(props)=>{
-    dispatch(ExpenseAction.deleteexpense(props.money))
+  const deletehandler=()=>{
+    dispatch(ExpenseAction.deleteexpense(props.id))
   
    
   }
